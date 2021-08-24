@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { BranchesController } from './branches.controller';
 
-@Module({})
+@Module({
+  controllers: [BranchesController]
+})
 export class BranchesModule {}
