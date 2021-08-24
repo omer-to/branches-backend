@@ -1,7 +1,8 @@
-import { IsLatitude, IsLongitude, IsString, IsPhoneNumber, MinLength } from 'class-validator'
+import { IsLatitude, IsLongitude, IsString, IsPhoneNumber, MinLength, IsNotEmpty } from 'class-validator'
 
 export class CreateBranchDto {
       @IsString()
+      @IsNotEmpty()
       fullAddress: string
 
       @IsLatitude({ message: 'Latitude must be between -90 and 90.' })
