@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Request, Controller, Delete, Get, Param, Patch, Post, UseGuards, Req } from '@nestjs/common';
 
 import { Roles } from '../decorators/roles.decorator';
 import { RoleGuard } from '../guards/role.guard';
@@ -10,11 +10,16 @@ import { UpdateBranchDto } from './dto/update-branch.dto';
 export class BranchesController {
       constructor(private readonly branchesService: BranchesService) { }
 
-      @Post()
       @Roles('employer')
       @UseGuards(RoleGuard)
+      @Post()
       create(@Body() requestBody: CreateBranchDto) {
             return this.branchesService.create(requestBody);
+      }
+
+      @Get()
+      findAll() {
+            return this.branchesService.findAll();
       }
 
       @Get(':branchID')
