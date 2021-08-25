@@ -8,11 +8,10 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
-
 @Module({
       imports:
             [
-                  ConfigModule.forRoot(),
+                  ConfigModule.forRoot({ isGlobal: true, }),
                   MongooseModule.forRoot(
                         process.env.MONGO_CONNECTION_URI,
                         {
@@ -29,7 +28,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
             [
                   {
                         provide: APP_GUARD,
-                        useClass: JwtAuthGuard
+                        useClass: JwtAuthGuard,
                   }
             ],
 })
