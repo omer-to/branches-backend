@@ -51,4 +51,25 @@ describe('UsersController', () => {
 
       });
 
+      /********************************************************************
+       * TESTS FOR GET METHOD | {@link UsersController.findByID} | GET /users/:userID
+       ********************************************************************/
+      
+      /**
+       *  Missing path parameter
+       */
+       it('should return 404 Not Found if the userID path parameter is missing in the path.', () => {
+             
+      });
+
+      /**
+       *  Sucessful cases
+       */
+       it('should return 200 OK if a user with the given ID exists in the database', () => {
+             
+      });
+
+      it('should return exactly one user', () => {
+             
+      });
 });
