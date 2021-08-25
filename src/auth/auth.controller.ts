@@ -23,7 +23,6 @@ export class AuthController {
       @Public()
       @Post('/signin')
       async signIn(@Body() requestBody: Omit<CreateUserDto, 'role'>): Promise<{ userID: string, access_token: string }> {
-            console.log('AuthController signIn')
             const { access_token, userID } = await this.authService.signIn(requestBody);
             return { access_token, userID }
       }
