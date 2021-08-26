@@ -1,10 +1,6 @@
 import { IsEmail, IsString, MinLength } from 'class-validator'
+import { UserRole } from 'src/enums/UserRole'
 
-// TODO: Move to a separate file
-enum UserRole {
-      employee = 'employee',
-      employer = 'employer',
-}
 export class CreateUserDto {
       @IsEmail()
       email: string

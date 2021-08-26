@@ -1,10 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
 
-enum UserRole {
-      employee = 'employee',
-      employer = 'employer',
-}
+import { UserRole } from 'src/enums/UserRole';
 
 @Schema({ timestamps: true })
 export class User {
