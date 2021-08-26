@@ -1,73 +1,34 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Set Up
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
+Clone the project and initialize both sub-modules:
 ```bash
-$ npm install
+&& git submodule update --init --recursive
 ```
-
-## Running the app
-
+Navigate to the project root directory, and run the following command to build and start Docker containers:
 ```bash
-# development
-$ npm run start
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
+The back-end application listens on port 8000, and the react application runs on port 3000.
+You can also see the Swagger file at http://localhost:8000/api
 
-## Test
+# Controllers
+There are total of three controllers in the application that are responsible for receiving a request and returning a response.
+All of the routes are private, unless explicitly decorated as `@Public()` as (`JwtAuthGuard`)[./src/guards/jwt-auth.guard.ts] is (provided)[./src/app.module.ts] as a global provider.
 
-```bash
-# unit tests
-$ npm run test
+1. [AuthController](./src/auth/auth.controller.ts)
+   This controller is responsible for signing up and in a user.
+   It defines two routes for POST requests, both of which are public.
+2. [BranchesController](./src/branches/branches.controller.ts)
+   This controller is responsible for CRUD operations on branches resource.
+   It defines total of 5 routes, all of which require authentication guarded by the JWT Service.
+   Furthermore, all of the routes for unsafe HTTP methods (i.e., other than GET) require role based authorization, giving no access to users with the **employee** role.
+3. [UsersController](./src/users/users.controller.ts)
+   This controller is only responsible for receiving a GET request to retrieve a user from the database.
+   It is protected by the globally provided `JwtAuthGuard`.
 
-# e2e tests
-$ npm run test:e2e
+# Database
+MongoDB is used as the database, and no volume is attached, hence data will not persist between restarts.
+There are two collections in the database: branches and users.
+There are a couple of ways of restrictring the employers to only listing the branches, such as using `$redact` operations, which would require an additional field as the access control list on the branches collection, however, I preferred using View collection as it's a read-only duplicate of the original collection.
 
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+A single field unique index is created on the `email` field for users in order to make an index scan instead of collection scan when querying the user, and to prohibit duplicate emails.
