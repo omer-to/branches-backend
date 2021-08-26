@@ -1,1 +1,6 @@
 node_modules
+dist
+test
+.nvmrc
+README.node_modules
+.prettierrc
