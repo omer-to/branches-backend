@@ -23,13 +23,15 @@ export class AuthService {
             try {
                   const match = await bcrypt.compare(requestBody.password, user.password)
                   if (match) {
-                        const payload = { email: user.email, sub: user.id, role: user.role };
+                        const { email, id, role } = user,
+                              payload = { email, sub: id, role };
                         return {
                               access_token: this.jwtService.sign(payload),
                               userID: user.id
                         };
                   }
             } catch (error) {
+                  // bcrypt.compare throws if it the hashed password doesn't match with the password provided as input
                   throw new UnauthorizedException('Invalid Credentials')
             }
       }
