@@ -13,7 +13,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
             [
                   ConfigModule.forRoot({ isGlobal: true, }),
                   MongooseModule.forRoot(
-                        process.env.MONGO_CONNECTION_URI,
+                        'mongodb://db',
                         {
                               useNewUrlParser: true,
                               useUnifiedTopology: true
