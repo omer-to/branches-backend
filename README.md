@@ -1,16 +1,11 @@
 # Set Up
 
-Clone the project and initialize both sub-modules:
+Clone the project, and navigate to the project root directory, and run the following command to build and start Docker containers:
 ```bash
-&& git submodule update --init --recursive
+docker-compose up --build -V
 ```
-Navigate to the project root directory, and run the following command to build and start Docker containers:
-```bash
-
-```
-The back-end application listens on port 8000, and the react application runs on port 3000.
+The back-end application listens on port 8000.
 You can also see the Swagger file at http://localhost:8000/api
-
 # Controllers
 There are total of three controllers in the application that are responsible for receiving a request and returning a response.
 All of the routes are private, unless explicitly decorated as `@Public()` as (`JwtAuthGuard`)[./src/guards/jwt-auth.guard.ts] is (provided)[./src/app.module.ts] as a global provider.
@@ -29,6 +24,5 @@ All of the routes are private, unless explicitly decorated as `@Public()` as (`J
 # Database
 MongoDB is used as the database, and no volume is attached, hence data will not persist between restarts.
 There are two collections in the database: branches and users.
-There are a couple of ways of restrictring the employers to only listing the branches, such as using `$redact` operations, which would require an additional field as the access control list on the branches collection, however, I preferred using View collection as it's a read-only duplicate of the original collection.
 
 A single field unique index is created on the `email` field for users in order to make an index scan instead of collection scan when querying the user, and to prohibit duplicate emails.
