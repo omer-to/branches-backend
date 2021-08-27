@@ -4,11 +4,11 @@ services:
     container_name: backend
     build:
       context: .
-      target: development
+      target: production
     volumes:
       - .:/usr/server
       - /usr/server/node_modules
-    command: npm run start:dev
+    command: npm run start:prod
     env_file:
       - .env
     depends_on:

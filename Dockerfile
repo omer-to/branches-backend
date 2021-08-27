@@ -21,10 +21,8 @@ WORKDIR /usr/server
 
 COPY package*.json ./
 
-RUN npm install --only=production
+RUN npm install -g rimraf @nestjs/cli
 
 COPY . .
 
-COPY --from=development /usr/server/dist ./dist
-
-CMD ["node", "dist/main"]
+RUN npm install --production
